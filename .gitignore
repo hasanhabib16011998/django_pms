@@ -1,0 +1,53 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Django ---
+# Default database (safe to ignore for local dev)
+db.sqlite3
+db.sqlite3-journal
+
+# Media: User-uploaded content (images, files) should not be in git
+media/
+
+# Static: The output directory for 'collectstatic'
+# (Make sure this matches your STATIC_ROOT setting)
+staticfiles/
+
+# Local settings (keep secrets out of git)
+*/local_settings.py
+
+# --- Environment & Secrets ---
+# Virtual Environments (including the one you are using: 'env')
+env/
+venv/
+.venv/
+.env
+
+# --- IDEs & Editors ---
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# --- Logs ---
+*.log
