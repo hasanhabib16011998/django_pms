@@ -46,6 +46,13 @@ class Project(models.Model):
     client_company = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="To Do")
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default="Medium")
+
+    # budget details
+    total_amount = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    amount_spent = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, blank=True, null=True)
+    estimated_duration = models.IntegerField(blank=True, null=True, help_text="Estimated duration in days")
+
+
     start_date = models.DateField()
     due_date = models.DateField()
     active = models.BooleanField(default=True)

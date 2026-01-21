@@ -5,5 +5,5 @@ from .views import DashBoardView
 app_name='accounts'
 
 urlpatterns = [
-    path('', DashBoardView.as_view(), name="dashbord"),
+    path('', DashBoardView.as_view(), name='dashboard'),
 ]
