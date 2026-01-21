@@ -4,12 +4,44 @@ from django.utils import timezone
 from datetime import timedelta, datetime
 from django.contrib.auth.models import User
 from .utils import STATUS_CHOICES, PRIORITY_CHOICES
+from teams.models import Team
 
+
+class ProjectQueryset(models.QuerySet):
+    def active(self):
+        return self.filter(active=True)
+    
+    def upcoming(self):
+        return self.filter(due_date__gte=timezone.now())
+    
+    def due_in_two_days_or_less(self):
+        today = timezone.now().date()
+        two_days_from_today = today + timedelta(days=2)
+        return self.active().upcoming().filter(due_date__lte=two_days_from_today)
+    
+    # user and team owned projects
+    def for_user(self, user):
+        return self.filter(models.Q(owner=user) | models.Q(team__members=user)).distinct()
+    
+
+class ProjectManager(models.Manager):
+    def get_queryset(self):
+        return ProjectQueryset(self.model, using=self._db)
+    
+    def all(self):
+        return self.get_queryset().active().upcoming()
+    
+    def due_in_two_days_or_less(self):
+         return self.get_queryset().active().upcoming().due_in_two_days_or_less()
+    
+    def for_user(self, user):
+        return self.get_queryset().active().upcoming().for_user(user)
 
 class Project(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projects')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
+    team = models.ForeignKey(Team,on_delete=models.CASCADE, related_name='team',blank=True, null=True, default=1)
     description = models.TextField(blank=True, null=True)
     client_company = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="To Do")
@@ -20,7 +52,7 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
+    objects = ProjectManager()
     def __str__(self):
         return self.name
 
