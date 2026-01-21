@@ -4,4 +4,4 @@ email: admin@vertical-innovations.com
 
 playlist: https://youtube.com/playlist?list=PLZgxeXKYwDRg44_q4LQ_PDsqLO-dBm_94&si=WOML8YOZR6iO4cER
 
-episode 1 ongoing: 02:14:11
+episode 1 complete
