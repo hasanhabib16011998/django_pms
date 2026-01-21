@@ -6,14 +6,41 @@ from django.contrib.auth.models import User
 from projects.utils import STATUS_CHOICES, PRIORITY_CHOICES
 from projects.models import Project
 
+class TaskQueryset(models.QuerySet):
+    def active(self):
+        return self.filter(active=True)
+    
+    def upcoming(self):
+        return self.filter(
+            models.Q(due_date__gte=timezone.now()) | models.Q(due_date__isnull=True))
+    
+    def for_user(self, user):
+        return self.filter(models.Q(owner=user) | models.Q(project__team__members=user)).distinct()
+    
 
+class TaskManager(models.Manager):
+    def get_queryset(self):
+        return TaskQueryset(self.model, using=self._db)
+    
+    def all(self):
+        return self.get_queryset().active().upcoming()
+    
+    def for_user(self, user):
+        return self.get_queryset().active().upcoming().for_user(user)
+    
 class Task(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
+    user_assigned_to = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='assigned_tasks',
+        null=True,
+        blank=True
+    )
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tasks')
     description = models.TextField(blank=True, null=True)
-    client_company = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="To Do")
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default="Medium")
     start_date = models.DateField()
@@ -21,6 +48,8 @@ class Task(models.Model):
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = TaskManager()
 
 
     def __str__(self):

@@ -12,11 +12,13 @@ class DashBoardView(View):
                
 
         if user.is_superuser:
+            print("Superuser")
             latest_projects = Project.objects.all()
             latest_tasks = Task.objects.all()
             latest_members = Profile.objects.all()
             team_count = Team.objects.all().count()
         else:
+            print("not superuser")
             latest_projects = Project.objects.for_user(user) 
             latest_tasks = Task.objects.for_user(user) 
             latest_members = Profile.objects.filter(
@@ -33,6 +35,7 @@ class DashBoardView(View):
         context["latest_project_count"] = latest_projects.count()
         context["projects_near_due_date"] = latest_projects.due_in_two_days_or_less()[:5]
         context["latest_task_count"] = latest_tasks.count()
+        context["latest_tasks"] = latest_tasks
         context["latest_members"] = latest_members[:8]
         context["latest_member_count"] = latest_members.count()
         context["team_count"] = team_count
