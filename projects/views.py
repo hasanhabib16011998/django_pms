@@ -38,14 +38,14 @@ class ProjectCreateView(CreateView):
         # send notification
         actor_username = self.request.user.username
         verb = f'New Project Assignment, {project.name}'
-        content_type_id = ContentType.objects.get_for_model(Project).id
-        object_id = project.id
-        members = project.team.members.all()
 
-        for member in members:
-            recipient_username = member.username
-            create_notification.delay(actor_username=actor_username,recipient_name=recipient_username,verb=verb,content_type_id=content_type_id,object_id=object_id)
-      
+        create_notification.delay(
+                actor_username=actor_username,  
+                verb=verb, 
+                object_id=project.id,
+                content_type_model = "project",
+                content_type_app_label = "projects"
+                )      
         return redirect(self.success_url)
     
 
