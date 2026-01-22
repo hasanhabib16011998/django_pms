@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # The Database Engine
+  redis:
+    image: redis:alpine
+    container_name: my_redis_server
+    restart: always
+    ports:
+      - "6379:6379"  # Maps Docker port 6379 to your Linux machine's port 6379
+
+  # The Web Interface
+  redis-ui:
+    image: rediscommander/redis-commander:latest
+    container_name: my_redis_ui
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"  # Access UI at localhost:8081
+    depends_on:
+      - redis

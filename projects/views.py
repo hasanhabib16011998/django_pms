@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
 from .models import Project
 from .forms import ProjectForm
+from notifications.tasks import create_notification
+from django.contrib.contenttypes.models import ContentType
 
 
 # Create your views here.
@@ -36,6 +38,13 @@ class ProjectCreateView(CreateView):
         # send notification
         actor_username = self.request.user.username
         verb = f'New Project Assignment, {project.name}'
+        content_type_id = ContentType.objects.get_for_model(Project).id
+        object_id = project.id
+        members = project.team.members.all()
+
+        for member in members:
+            recipient_username = member.username
+            create_notification.delay(actor_username=actor_username,recipient_name=recipient_username,verb=verb,content_type_id=content_type_id,object_id=object_id)
       
         return redirect(self.success_url)
     
