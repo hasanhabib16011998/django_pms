@@ -223,13 +223,15 @@ class ProjectDetailView(DetailView):
                 # send notification
                 actor_username = self.request.user.username
                 actor_full_name = self.request.user.profile.full_name
-                verb = f'{actor_full_name}, commented on {project.name}'
+                verb = f'{actor_full_name} commented on {project.name}'
 
                 create_notification.delay(
-                        actor_username=actor_username,  
-                        verb=verb, 
-                        object_id=project.id
-                        )   
+                    actor_username=actor_username,  
+                    verb=verb, 
+                    object_id=project.id,
+                    content_type_model = "project",
+                    content_type_app_label = "projects"
+                )   
                 messages.success(request, "Your comment has been added successfully")
                 return redirect('projects:project-detail', pk=project.pk)
             else:
