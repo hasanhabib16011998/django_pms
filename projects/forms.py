@@ -1,7 +1,7 @@
 from django import forms
 # from django.contrib.auth.models import User
 from tempus_dominus.widgets import DatePicker
-from .models import Project
+from .models import *
 from teams.models import Team
 from .utils import STATUS_CHOICES, PRIORITY_CHOICES
 
@@ -109,3 +109,7 @@ class ProjectForm(forms.ModelForm):
             "estimated_duration"
             ]
 
+class AttachmentForm(forms.ModelForm):
+    class Meta:
+        model = Attachment
+        fields = ['file']

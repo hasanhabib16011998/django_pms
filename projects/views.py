@@ -6,9 +6,11 @@ from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
 from .models import Project
-from .forms import ProjectForm
+from .forms import ProjectForm, AttachmentForm
 from notifications.tasks import create_notification
 from django.contrib.contenttypes.models import ContentType
+from comments.models import Comment
+from comments.forms import CommentForm
 
 
 # Create your views here.
