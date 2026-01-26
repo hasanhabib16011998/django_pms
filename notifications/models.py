@@ -9,10 +9,12 @@ class NotificationManager(models.Manager):
     #     return self.filter(receipient=user)
     
     def unread(self, user):
-        return self.filter(read=False).exclude(actor=user)
+        #return self.filter(read=False).exclude(actor=user)  #disabled for testing. uncomment in production
+        return self.filter(read=False,receipient=user)
     
     def read(self,user):
-        return self.filter(read=True).exclude(actor=user)
+        #return self.filter(read=True).exclude(actor=user)
+        return self.filter(read=True,receipient=user) #disabled for testing. uncomment in production
 
 
 class Notification(models.Model):

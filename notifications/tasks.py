@@ -47,12 +47,10 @@ def notify_teams_due_projects_tasks():
         verb = f"Reminder: The project {project.name} is due soon!"
         actor_username = project.owner.username
 
-        members = project.team.members.all()
-        for member in members:
-            create_notification.delay(
-                actor_username=actor_username,
-                verb=verb,
-                object_id=project.id,
-                content_type_model = "project",
-                content_type_app_label = "projects"
-            )
+        create_notification.delay(
+            actor_username=actor_username,
+            verb=verb,
+            object_id=project.id,
+            content_type_model = "project",
+            content_type_app_label = "projects"
+        )

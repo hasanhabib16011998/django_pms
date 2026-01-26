@@ -305,7 +305,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer text-center">
-                <a href="./pages/examples/teams.html">View All Users</a>
+                <a href="{% url 'accounts:members-list' %}">View All Users</a>
               </div>
               <!-- /.card-footer -->
             </div>
@@ -355,7 +355,9 @@
                 <!--/.direct-chat-messages-->
               </div>
               <!-- /.card-body -->
-              
+              <div class="card-footer text-center">
+                <a href="{% url 'notifications:notification-list' %}">View All Notifications</a>
+              </div>
               <!-- /.card-footer-->
             </div>
             <!--/.direct-chat -->

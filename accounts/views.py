@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import View
+from django.views.generic import View,ListView, DetailView, UpdateView
 from projects.models import *
 from tasks.models import *
 from notifications.models import *
@@ -29,7 +29,7 @@ class DashBoardView(View):
         
         context = {}
         latest_notifications = user.notifications.unread(user)
-        context["latest_notifications"] = latest_notifications[:3]
+        context["latest_notifications"] = latest_notifications[:9]
         context["notification_count"] = latest_notifications.count()
         context["latest_projects"] = latest_projects[:5]
         context["latest_project_count"] = latest_projects.count()
@@ -42,3 +42,33 @@ class DashBoardView(View):
         context["header_text"] = "Dashboard"
         context["title"] = "Dashboard"
         return render(request, "accounts/dashboard.html", context)
+
+class MembersListView(ListView):
+    model = Profile
+    context_object_name = "members"
+    template_name = "accounts/profile_list.html"
+    paginate_by = 9
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            latest_members = Profile.objects.all()
+            return latest_members
+        else:
+            latest_members = Profile.objects.filter(
+                user__teams__in=user.teams.all()
+            ).distinct()
+            return latest_members
+
+
+    def get_context_data(self, **kwargs):
+        # latest notifications
+        context = super(MembersListView, self).get_context_data(**kwargs)
+        # if self.request.user.is_authenticated:
+        latest_notifications = self.request.user.notifications.unread(self.request.user)            
+        
+        context["latest_notifications"] = latest_notifications[:3]
+        context["notification_count"] = latest_notifications.count()
+        context["header_text"] = "Members"
+        context["title"] = "All Members"
+        return context
