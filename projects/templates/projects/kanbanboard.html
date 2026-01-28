@@ -1,18 +1,36 @@
 {% extends "base.html" %}
 {% block title %}{{ title }} | {{ block.super}}{% endblock title %}
+{% load static %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static "plugins/ekko-lightbox/ekko-lightbox.css" %}">
+<style>
+.task-card {
+    cursor: grab;
+}
+
+.form-group {
+    display: flex;
+}
+
+#backlog h3 {
+    margin-right: 10px;
+}
+</style>
+{% endblock %}
 
 {% block content %}
 
 <div class="container-fluid h-100">
-    <div class="card card-row card-secondary">
+    <div class="card card-row card-secondary board-column">
       <div class="card-header">
         <h3 class="card-title">
           Backlog
         </h3>
       </div>
-      <div class="card-body">
+      <div class="card-body task-list">
         {% for task in backlog_tasks %}
-            <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id}}">
+            <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id }}">
             <div class="card-header">
                 <h5 class="card-title">{{ task.name }}</h5>
                 <div class="card-tools">
@@ -51,15 +69,15 @@
 
 
 
-    <div class="card card-row card-primary">
+    <div class="card card-row card-primary board-column">
         <div class="card-header">
           <h3 class="card-title">
             To Do
           </h3>
         </div>
-        <div class="card-body">
+        <div class="card-body task-list">
           {% for task in todo_tasks %}
-              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id}}">
+              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id }}">
               <div class="card-header">
                   <h5 class="card-title">{{ task.name }}</h5>
                   <div class="card-tools">
@@ -99,15 +117,15 @@
 
 
 
-      <div class="card card-row card-default">
+      <div class="card card-row card-default board-column">
         <div class="card-header">
           <h3 class="card-title">
             In Progress
           </h3>
         </div>
-        <div class="card-body">
+        <div class="card-body task-list">
           {% for task in in_progress_tasks %}
-              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id}}">
+              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id }}">
               <div class="card-header">
                   <h5 class="card-title">{{ task.name }}</h5>
                   <div class="card-tools">
@@ -145,15 +163,15 @@
     </div>
 
 
-    <div class="card card-row card-success">
+    <div class="card card-row card-success board-column">
         <div class="card-header">
           <h3 class="card-title">
             Completed
           </h3>
         </div>
-        <div class="card-body">
+        <div class="card-body task-list">
           {% for task in completed_tasks %}
-              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id}}">
+              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id }}">
               <div class="card-header">
                   <h5 class="card-title">{{ task.name }}</h5>
                   <div class="card-tools">
@@ -193,4 +211,36 @@
 
 </div>
 
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded',function(){
+        const taskCards = document.querySelectorAll('.task-card');
+        taskCards.forEach(card => {
+            card.draggable = true;
+
+            card.addEventListener('dragstart', (e)=> {
+                e.dataTransfer.setData('text/plain', card.dataset.taskId);
+                console.log(card.dataset);
+            })
+
+        });
+
+        const columns = document.querySelectorAll('.board-column');
+        columns.forEach(column=>{
+            column.addEventListener('dragover', (e)=> {
+                e.preventDefault();
+
+                column.addEventListener('drop', (e)=> {
+                    const taskId = e.dataTransfer.getData('text/plain');
+                    const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
+
+                    //move the task card to new column
+                    column.querySelector('.task-list').prepend(taskCard);
+                })
+            })
+        })
+    });
+</script>
 {% endblock %}
