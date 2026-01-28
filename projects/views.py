@@ -275,7 +275,7 @@ class KanbanBoardView(DetailView):
         context["todo_tasks"] = project.tasks.filter(status="To Do").upcoming()
         context["in_progress_tasks"] = project.tasks.filter(status="In Progress").upcoming()
         context["completed_tasks"] = project.tasks.filter(status="Completed").upcoming()
-        context['form'] = TaskUpdateForm()
+        #context['form'] = TaskUpdateForm()
         # context['task_assignment_form'] = TaskUserAssignmentForm()
         
         return context

@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} | {{ block.super}}{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid h-100">
+    <div class="card card-row card-secondary">
+      <div class="card-header">
+        <h3 class="card-title">
+          Backlog
+        </h3>
+      </div>
+      <div class="card-body">
+        {% for task in backlog_tasks %}
+            <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id}}">
+            <div class="card-header">
+                <h5 class="card-title">{{ task.name }}</h5>
+                <div class="card-tools">
+                <a href="#" class="btn btn-tool btn-link task-counter"></a>              
+
+
+                <a href="#" class="btn btn-tool">
+                    <i class="fas fa-pen"></i>
+                </a>
+
+                <a href="#" class="btn btn-tool">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+
+                {% if task.user_assigned_to %}
+                  <a href="#">
+                  <img src="{{ task.user_assigned_to.profile.profile_picture_url }}" height="20" width="20" class="img-circle elevation-2" alt="{{ task.user_assigned_to.profile.full_name}}">
+                </a>
+                {% endif %}
+                </div>
+            </div> 
+            
+            {% comment %} task description {% endcomment %}
+            {% if task.description %}
+             <div class="card-body">
+                <p class="card-description">
+                 {{ task.description }}
+                </p>
+              </div>            
+            {% endif %}
+
+            </div>
+        {% endfor %}
+      </div>
+    </div>
+
+
+
+    <div class="card card-row card-primary">
+        <div class="card-header">
+          <h3 class="card-title">
+            To Do
+          </h3>
+        </div>
+        <div class="card-body">
+          {% for task in todo_tasks %}
+              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id}}">
+              <div class="card-header">
+                  <h5 class="card-title">{{ task.name }}</h5>
+                  <div class="card-tools">
+                  <a href="#" class="btn btn-tool btn-link task-counter"></a>              
+  
+  
+                  <a href="#" class="btn btn-tool">
+                      <i class="fas fa-pen"></i>
+                  </a>
+  
+                  <a href="#" class="btn btn-tool">
+                      <i class="fas fa-user-plus"></i>
+                  </a>
+  
+                  {% if task.user_assigned_to %}
+                    <a href="#">
+                    <img src="{{ task.user_assigned_to.profile.profile_picture_url }}" height="20" width="20" class="img-circle elevation-2" alt="{{ task.user_assigned_to.profile.full_name}}">
+                  </a>
+                  {% endif %}
+                  </div>
+              </div> 
+              
+              {% comment %} task description {% endcomment %}
+              {% if task.description %}
+               <div class="card-body">
+                  <p class="card-description">
+                   {{ task.description }}
+                  </p>
+                </div>            
+              {% endif %}
+  
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+
+
+
+
+      <div class="card card-row card-default">
+        <div class="card-header">
+          <h3 class="card-title">
+            In Progress
+          </h3>
+        </div>
+        <div class="card-body">
+          {% for task in in_progress_tasks %}
+              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id}}">
+              <div class="card-header">
+                  <h5 class="card-title">{{ task.name }}</h5>
+                  <div class="card-tools">
+                  <a href="#" class="btn btn-tool btn-link task-counter"></a>              
+  
+  
+                  <a href="#" class="btn btn-tool">
+                      <i class="fas fa-pen"></i>
+                  </a>
+  
+                  <a href="#" class="btn btn-tool">
+                      <i class="fas fa-user-plus"></i>
+                  </a>
+  
+                  {% if task.user_assigned_to %}
+                    <a href="#">
+                    <img src="{{ task.user_assigned_to.profile.profile_picture_url }}" height="20" width="20" class="img-circle elevation-2" alt="{{ task.user_assigned_to.profile.full_name}}">
+                  </a>
+                  {% endif %}
+                  </div>
+              </div> 
+              
+              {% comment %} task description {% endcomment %}
+              {% if task.description %}
+               <div class="card-body">
+                  <p class="card-description">
+                   {{ task.description }}
+                  </p>
+                </div>            
+              {% endif %}
+  
+              </div>
+          {% endfor %}
+        </div>
+    </div>
+
+
+    <div class="card card-row card-success">
+        <div class="card-header">
+          <h3 class="card-title">
+            Completed
+          </h3>
+        </div>
+        <div class="card-body">
+          {% for task in completed_tasks %}
+              <div class="card card-secondary card-outline task-card" data-task-id="{{ task.id}}">
+              <div class="card-header">
+                  <h5 class="card-title">{{ task.name }}</h5>
+                  <div class="card-tools">
+                  <a href="#" class="btn btn-tool btn-link task-counter"></a>              
+  
+  
+                  <a href="#" class="btn btn-tool">
+                      <i class="fas fa-pen"></i>
+                  </a>
+  
+                  <a href="#" class="btn btn-tool">
+                      <i class="fas fa-user-plus"></i>
+                  </a>
+  
+                  {% if task.user_assigned_to %}
+                    <a href="#">
+                    <img src="{{ task.user_assigned_to.profile.profile_picture_url }}" height="20" width="20" class="img-circle elevation-2" alt="{{ task.user_assigned_to.profile.full_name}}">
+                  </a>
+                  {% endif %}
+                  </div>
+              </div> 
+              
+              {% comment %} task description {% endcomment %}
+              {% if task.description %}
+               <div class="card-body">
+                  <p class="card-description">
+                   {{ task.description }}
+                  </p>
+                </div>            
+              {% endif %}
+  
+              </div>
+          {% endfor %}
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

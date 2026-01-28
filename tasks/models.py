@@ -41,7 +41,7 @@ class Task(models.Model):
     )
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tasks')
     description = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="To Do")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Backlog")
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default="Medium")
     start_date = models.DateField()
     due_date = models.DateField()
