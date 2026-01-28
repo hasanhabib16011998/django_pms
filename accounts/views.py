@@ -1,10 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import  render, redirect
 from django.views.generic import View,ListView, DetailView, UpdateView
 from projects.models import *
 from tasks.models import *
 from notifications.models import *
 from .models import *
+from .forms import RegisterForm, ProfileUpdateForm
+from django.contrib import messages
 
+
+
+
+# user registration
+def RegisterView(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "Registration is successful")
+            return redirect('login')
+        else:
+            messages.error(request, "Please correct the errors below")
+    else:
+        form = RegisterForm()
+
+    return render(request, 'registration/register.html', {'form':form})
 # Create your views here.
 class DashBoardView(View):
     def get(self, request, *args, **kwargs):
