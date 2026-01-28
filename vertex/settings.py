@@ -65,6 +65,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'vertex.urls'
+# custom django auth settings
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'accounts:dashboard'
+LOGOUT_REDIRECT_URL = LOGIN_URL
 
 TEMPLATES = [
     {

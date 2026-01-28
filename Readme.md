@@ -4,7 +4,7 @@ email: admin@vertical-innovations.com
 
 playlist: https://youtube.com/playlist?list=PLZgxeXKYwDRg44_q4LQ_PDsqLO-dBm_94&si=WOML8YOZR6iO4cER
 
-episode 4 complete
+episode 5 ongoing 25:46
 
 
 
@@ -20,4 +20,4 @@ Celery worker:
 celery -A vertex worker -l info
 
 celery beat:
-celery -A vertex beat --loglevel=info 
+celery -A vertex beat --loglevel=info
