@@ -218,6 +218,7 @@
     </div>
 
     {% include "tasks/task_update_modal.html" %}
+    {% include "tasks/team_member_task_assignment_modal.html" %}
 
 
 </div>
@@ -530,6 +531,92 @@
 
         
       });
+
+
+      //task assignment modal
+      function openTeamMemberAssignmentModal(taskId){
+        fetch(`/tasks/${taskId}/assignment-form/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error){
+            console.error(data.error);
+          } else {
+            document.querySelector('#taskAssignmentModal .modal-body').innerHTML = data.html;
+            $('#taskAssignmentModal').modal('show');
+            
+            //submitting the form
+            teamMemberAssignmentHandler();
+          }
+        })
+        .catch(error => console.error('Error fetching the task assignment form:', error));
+        
+      }
+    
+       
+      function teamMemberAssignmentHandler(){
+      const assignmentForm = document.querySelector('#task-assignment-form');
+      if (assignmentForm){
+        assignmentForm.addEventListener('submit', function (e){
+          e.preventDefault();
+          const url = this.action;
+          const formData = new FormData(this);
+          const taskId = this.getAttribute('data-task-id');
+  
+          fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+          })
+          .then(response => response.json())
+          .then(data =>{
+            if(data.success){
+                $('#taskAssignmentModal').modal('hide');
+  
+                //dynamically update a task card
+                const taskCard = document.querySelector(`.task-card[data-task-id="${taskId}"]`);
+                if (taskCard){
+                const toolsDiv  = taskCard.querySelector('.card-tools');
+                if(!toolsDiv){
+                  console.error("Tools dive does not exist");
+                  return;
+                }
+  
+                //update or insert profiel picture 
+                const existingProfileImg = taskCard.querySelector('img');
+                if (existingProfileImg){
+                  existingProfileImg.src = data.user.profile_picture_url;
+  
+                }else{
+                  const imgHtml = `<a href="#">
+                    <img src="${data.user.profile_picture_url}" height="20" width="20" class="img-circle elevation-2" alt="${data.user.name}">
+                  </a>`;
+  
+                  //insert profile image in the tools div
+                  toolsDiv.insertAdjacentHTML('beforeend', imgHtml)
+                  
+                  
+                }
+  
+                }
+  
+            }else{
+              alert('error: ' + JSON.stringify(data.error));
+            }
+          })
+          .catch(error => console.error('Error submitting the form:', error));
+        });
+      }else{
+        console.error("Assignment form not found");
+      }
+  
+      }
 
 
 
