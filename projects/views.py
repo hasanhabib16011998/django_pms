@@ -11,6 +11,7 @@ from notifications.tasks import create_notification
 from django.contrib.contenttypes.models import ContentType
 from comments.models import Comment
 from comments.forms import CommentForm
+from tasks.forms import *
 
 
 # Create your views here.
@@ -275,7 +276,7 @@ class KanbanBoardView(DetailView):
         context["todo_tasks"] = project.tasks.filter(status="To Do").upcoming()
         context["in_progress_tasks"] = project.tasks.filter(status="In Progress").upcoming()
         context["completed_tasks"] = project.tasks.filter(status="Completed").upcoming()
-        #context['form'] = TaskUpdateForm()
-        # context['task_assignment_form'] = TaskUserAssignmentForm()
+        context['form'] = TaskUpdateForm()
+        context['task_assignment_form'] = TaskUserAssignmentForm()
         
         return context

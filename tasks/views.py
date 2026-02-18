@@ -59,17 +59,17 @@ def get_task(request, task_id):
     try:
         task = Task.objects.get(id=task_id)
     except Task.DoesNotExist:
-        return JsonResponse({"error": "Task not found"}, stutus=404)
+        return JsonResponse({"error": "Task not found"}, status=404)
     
     if request.method == "GET":
          # construct a json response
          task_data =  {
-             "task_id": str(task.id),
-             "name": task.name,
-             "description": task.description,
+            "task_id": str(task.id),
+            "name": task.name,
+            "description": task.description,
             "priority": task.priority,
-             "start_date": task.start_date.isoformat() if task.start_date else "",
-             "due_date": task.due_date.isoformat() if task.due_date else "",
+            "start_date": task.start_date.isoformat() if task.start_date else "",
+            "due_date": task.due_date.isoformat() if task.due_date else "",
          }
 
          return JsonResponse({"task_data": task_data})
